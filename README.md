@@ -44,4 +44,4 @@ This repo packages the reusable pieces from a working setup:
 
 - This repo does not include a personal memory layer or resume corpus.
 - Google Sheets upload and outbound email are documented, but credential material is intentionally omitted.
-- The Chrome bridge is the first browser target in this repo. Firefox can be added later as a separate port.
+- The Chrome bridge is the first browser target in this repo.
