@@ -26,3 +26,4 @@ Chrome console bridge + small scripts for job discovery and tracking.
 
 - Setup: `docs/SETUP.md`
 - Agent prompt template: `docs/AGENT_PROMPT.md`
+- Resources: `docs/RESOURCES.md`
