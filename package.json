@@ -1,0 +1,10 @@
+{
+  "name": "findmyjob-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "discover": "node ./scripts/discover-jobs.mjs",
+    "master:discovery": "node ./scripts/update-master-discovery-csv.mjs"
+  }
+}

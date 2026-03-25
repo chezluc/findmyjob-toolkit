@@ -1,0 +1,10 @@
+.env
+.DS_Store
+node_modules/
+dist/
+runs/
+trackers/
+*.log
+*.csv
+*.jsonl
+tmp/

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Example Outreach Email</title>
+    <style>
+      body { font-family: Arial, sans-serif; color: #1f2937; margin: 0; padding: 24px; background: #f8fafc; }
+      .card { max-width: 720px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; padding: 32px; }
+      h1 { font-size: 20px; margin: 0 0 16px; }
+      p { line-height: 1.55; margin: 0 0 16px; }
+      .video { margin: 24px 0; }
+      .thumb { position: relative; display: block; border: 1px solid #d1d5db; overflow: hidden; }
+      .thumb img { display: block; width: 100%; height: auto; }
+      .play {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 76px;
+        height: 76px;
+        margin-left: -38px;
+        margin-top: -38px;
+        border-radius: 999px;
+        background: rgba(17,24,39,0.72);
+      }
+      .play:before {
+        content: "";
+        position: absolute;
+        left: 31px;
+        top: 23px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 24px solid #ffffff;
+      }
+      .label { font-size: 14px; color: #4b5563; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Hello {{company_name}},</h1>
+      <p>I’m writing to follow up on my application for the {{role_name}} role and share a few concise examples of the type of work I’ve been building recently.</p>
+      <p>My background is centered around workflow automation, internal tooling, implementation support, browser automation, spreadsheet and API integrations, and adoption/documentation workflows that help teams use new tools quickly.</p>
+
+      <div class="video">
+        <a class="thumb" href="{{video_url_1}}">
+          <img src="{{hosted_thumbnail_1}}" alt="{{video_title_1}}">
+          <span class="play"></span>
+        </a>
+        <p class="label"><strong>{{video_title_1}}</strong><br>{{video_description_1}}</p>
+      </div>
+
+      <div class="video">
+        <a class="thumb" href="{{video_url_2}}">
+          <img src="{{hosted_thumbnail_2}}" alt="{{video_title_2}}">
+          <span class="play"></span>
+        </a>
+        <p class="label"><strong>{{video_title_2}}</strong><br>{{video_description_2}}</p>
+      </div>
+    </div>
+  </body>
+</html>

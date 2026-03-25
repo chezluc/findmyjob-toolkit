@@ -1,0 +1,16 @@
+{
+  "name": "general-chrome-console-bridge",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Bridge-tab Chrome console bridge for reliable structured JavaScript execution on target tabs.",
+  "scripts": {
+    "bridge": "node ./bridge/server.mjs",
+    "build": "node ./scripts/build.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.29",
+    "esbuild": "^0.25.1",
+    "typescript": "^5.8.2"
+  }
+}
