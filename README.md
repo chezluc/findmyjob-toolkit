@@ -11,14 +11,6 @@ This repo packages the reusable pieces from a working setup:
 - HTML outreach email setup notes
 - a generic HTML outreach example
 
-This copy is intentionally sanitized:
-
-- no API keys
-- no SMTP passwords
-- no FTP credentials
-- no personal resume data
-- no private mail or browser data
-
 ## Repo Layout
 
 - `tools/chrome-console-bridge`
