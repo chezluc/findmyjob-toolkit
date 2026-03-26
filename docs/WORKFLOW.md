@@ -20,6 +20,7 @@
   - CSV update
   - scoring
   - application-pack generation
+  - evidence retrieval (RAG)
 - External integrations:
   - Google Sheets
   - SMTP / IMAP
@@ -31,3 +32,4 @@
 - Upload discovery rows incrementally.
 - Score only real job URLs, never search-result URLs.
 - Keep browser automation to one active browser target where possible.
+- Maintain a local evidence index (RAG) so “relevant experience + proof” can be pulled automatically during pack generation. See `docs/RAG.md`.
