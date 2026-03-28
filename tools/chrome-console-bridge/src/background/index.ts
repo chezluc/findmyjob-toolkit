@@ -182,7 +182,7 @@ async function runSnippet(code: string, world: ExecutionWorld, snippetName?: str
   return envelope;
 }
 
-async function openUrl(url: string, active = true, targetTabId?: number): Promise<RunResultEnvelope> {
+async function openUrl(url: string, _active = false, targetTabId?: number): Promise<RunResultEnvelope> {
   if (!url || !/^https?:/i.test(url)) {
     throw new Error("OPEN_URL requires an http/https URL.");
   }
@@ -190,10 +190,11 @@ async function openUrl(url: string, active = true, targetTabId?: number): Promis
   const startedAt = Date.now();
   let tab: chrome.tabs.Tab;
 
+  // Always open in background — never steal focus from the user's active tab
   if (targetTabId) {
-    tab = await chrome.tabs.update(targetTabId, { url, active });
+    tab = await chrome.tabs.update(targetTabId, { url, active: false });
   } else {
-    tab = await chrome.tabs.create({ url, active });
+    tab = await chrome.tabs.create({ url, active: false });
   }
 
   const envelope: RunResultEnvelope = {
