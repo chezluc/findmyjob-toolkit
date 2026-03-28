@@ -13,6 +13,7 @@ import { collectAIState } from "./ai-state-collector";
 const BRIDGE_BASE_URL = "http://127.0.0.1:4471";
 const BRIDGE_POLL_ALARM = "bridge-poll";
 let pollInFlight = false;
+let reusableWorkerTabId: number | undefined;
 
 chrome.runtime.onInstalled.addListener(() => {
   void ensureBridgeTab();
@@ -190,11 +191,22 @@ async function openUrl(url: string, _active = false, targetTabId?: number): Prom
   const startedAt = Date.now();
   let tab: chrome.tabs.Tab;
 
-  // Always open in background — never steal focus from the user's active tab
-  if (targetTabId) {
-    tab = await chrome.tabs.update(targetTabId, { url, active: false });
+  // Always open in background — never steal focus from the user's active tab.
+  // Reuse a single worker tab so we don't accumulate tabs.
+  const effectiveTabId = targetTabId ?? reusableWorkerTabId;
+  if (effectiveTabId) {
+    try {
+      tab = await chrome.tabs.update(effectiveTabId, { url, active: false });
+    } catch {
+      // Tab was closed — create a fresh one
+      tab = await chrome.tabs.create({ url, active: false });
+    }
   } else {
     tab = await chrome.tabs.create({ url, active: false });
+  }
+  // Remember this tab for future OPEN_URL calls
+  if (tab.id) {
+    reusableWorkerTabId = tab.id;
   }
 
   const envelope: RunResultEnvelope = {
