@@ -2,9 +2,11 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { RUNS_DIR, SUBDOMAIN_LIST } from './config.mjs';
 
-const OUTPUT_DIR = path.join(RUNS_DIR, 'discovery');
+const WORKSPACE = 'process.env.WORKSPACE';
+const SITE_LIST = 'process.env.WORKSPACE/github-projects/lukes-tools/job-search-sites/subdomains.txt';
+const OUTPUT_DIR = path.join(WORKSPACE, 'runs', 'discovery');
+
 const args = process.argv.slice(2);
 
 function getArg(name, fallback = '') {
@@ -28,11 +30,11 @@ const title = getArg('title');
 const locale = getArg('locale');
 
 if (!title) {
-  console.error('Usage: node scripts/discover-jobs.mjs --title=\"production designer\" [--locale=\"remote\"]');
+  console.error('Usage: node scripts/discover-jobs.mjs --title="production designer" [--locale="san francisco"]');
   process.exit(1);
 }
 
-const raw = await fs.readFile(SUBDOMAIN_LIST, 'utf8');
+const raw = await fs.readFile(SITE_LIST, 'utf8');
 const templates = raw
   .split('\n')
   .map((line) => line.trim())
@@ -40,25 +42,29 @@ const templates = raw
 
 const queries = templates.map((template) => {
   let query = template;
-  if (query.includes('\"job title\"')) {
-    query = query.replace(/\"job title\"/g, `\"${title}\"`);
+  if (query.includes('"job title"')) {
+    query = query.replace(/"job title"/g, `"${title}"`);
   } else {
-    query = `${query} \"${title}\"`;
+    query = `${query} "${title}"`;
   }
-  if (locale) query = `${query} \"${locale}\"`;
-  return { template, query: query.trim() };
+  if (locale) query = `${query} "${locale}"`;
+  return {
+    template,
+    query: query.trim(),
+  };
 });
 
 await fs.mkdir(OUTPUT_DIR, { recursive: true });
 const outputPath = path.join(OUTPUT_DIR, `${slugify(title)}${locale ? `-${slugify(locale)}` : ''}.queries.json`);
 
-await fs.writeFile(outputPath, JSON.stringify({
+const payload = {
   generatedAt: new Date().toISOString(),
   title,
   locale,
-  siteList: SUBDOMAIN_LIST,
+  siteList: SITE_LIST,
   total: queries.length,
   queries,
-}, null, 2), 'utf8');
+};
 
+await fs.writeFile(outputPath, JSON.stringify(payload, null, 2), 'utf8');
 console.log(JSON.stringify({ outputPath, total: queries.length }, null, 2));

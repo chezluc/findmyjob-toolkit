@@ -64,15 +64,15 @@ async function readExistingCsv(filePath) {
   }
 }
 
-const aggregatedPath = getArg('aggregated');
+const shortlistPath = getArg('shortlist');
 const outputPath = getArg('output', MASTER_CSV_PATH);
 
-if (!aggregatedPath) {
-  console.error('Usage: node scripts/update-master-discovery-csv.mjs --aggregated=/path/to/aggregated-candidates.json [--output=/path/to/master.csv]');
+if (!shortlistPath) {
+  console.error('Usage: node scripts/update-master-shortlist-csv.mjs --shortlist=/path/to/shortlist.json [--output=/path/to/master.csv]');
   process.exit(1);
 }
 
-const aggregated = await readJson(aggregatedPath);
+const shortlist = await readJson(shortlistPath);
 const existingRows = await readExistingCsv(outputPath);
 const byPostingUrl = new Map(existingRows.map((row) => [row['Posting URL'], row]));
 
@@ -97,28 +97,26 @@ const headers = [
   'Candidate Dir',
 ];
 
-for (const item of aggregated.candidates || []) {
-  const url = item.canonicalUrl || item.url || `${aggregated.title}-${item.rank}`;
-  const existing = byPostingUrl.get(url) || {};
-  byPostingUrl.set(url, {
-    'Title Query': aggregated.title || existing['Title Query'] || '',
-    'Run Created At': aggregated.createdAt || existing['Run Created At'] || '',
-    'Rank': existing['Rank'] || '',
-    'Company': existing['Company'] || item.company || '',
-    'Role Title': existing['Role Title'] || item.text || '',
-    'Posting URL': item.url || '',
-    'Activity Status': existing['Activity Status'] || 'discovered',
-    'Score Total': existing['Score Total'] || '',
-    'Score Raw Total': existing['Score Raw Total'] || '',
-    'Score Title': existing['Score Title'] || '',
-    'Score Evidence': existing['Score Evidence'] || '',
-    'Score Activity': existing['Score Activity'] || '',
-    'Top Evidence Titles': existing['Top Evidence Titles'] || '',
-    'Posting Path': existing['Posting Path'] || '',
-    'Application Structure Path': existing['Application Structure Path'] || '',
-    'Links Path': existing['Links Path'] || '',
-    'Evidence Path': existing['Evidence Path'] || '',
-    'Candidate Dir': existing['Candidate Dir'] || '',
+for (const item of shortlist.shortlist || []) {
+  byPostingUrl.set(item.postingUrl || `${shortlist.title}-${item.rank}`, {
+    'Title Query': shortlist.title || '',
+    'Run Created At': shortlist.createdAt || '',
+    'Rank': String(item.rank ?? ''),
+    'Company': item.company || '',
+    'Role Title': item.roleTitle || '',
+    'Posting URL': item.postingUrl || '',
+    'Activity Status': item.activityStatus || '',
+    'Score Total': String(item.score?.total ?? ''),
+    'Score Raw Total': String(item.score?.rawTotal ?? ''),
+    'Score Title': String(item.score?.titleScore ?? ''),
+    'Score Evidence': String(item.score?.evidenceScore ?? ''),
+    'Score Activity': String(item.score?.activityScore ?? ''),
+    'Top Evidence Titles': (item.topEvidence || []).map((entry) => entry.materialTitle).join(' | '),
+    'Posting Path': item.postingPath || '',
+    'Application Structure Path': item.applicationStructurePath || '',
+    'Links Path': item.linksPath || '',
+    'Evidence Path': item.evidencePath || '',
+    'Candidate Dir': item.candidateDir || '',
   });
 }
 
