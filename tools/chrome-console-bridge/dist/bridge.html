@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chrome Console Bridge Agent</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #111827;
+      color: #e5e7eb;
+    }
+    .card {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 12px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+    p {
+      margin: 0 0 16px;
+      color: #cbd5e1;
+    }
+    .status {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    pre {
+      margin: 0;
+      padding: 14px;
+      background: #020617;
+      color: #93c5fd;
+      border-radius: 8px;
+      overflow: auto;
+      min-height: 220px;
+      white-space: pre-wrap;
+    }
+    .ok { color: #86efac; }
+    .bad { color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Chrome Console Bridge Agent</h1>
+    <p>Keep this page open in Chrome. It polls the local bridge server and runs snippets through the extension background runner.</p>
+    <div class="status">
+      <div>Bridge server: <span id="serverStatus" class="bad">disconnected</span></div>
+      <div>Polling: <span id="pollStatus">idle</span></div>
+      <div>Last command: <code id="lastCommand">none</code></div>
+      <div>Last result: <code id="lastResult">none</code></div>
+    </div>
+    <pre id="logOutput">Agent bridge starting…</pre>
+  </div>
+  <script src="bridge.js" type="module"></script>
+</body>
+</html>
